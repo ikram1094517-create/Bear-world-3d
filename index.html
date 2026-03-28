@@ -1,0 +1,1552 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <title>مغامرة الدب 3 </title>
+    <style>
+
+
+   /* التصميم الجديد للمقدمة */
+#intro-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 1000; overflow: hidden;
+}
+
+
+.overlay-graphics {
+    position: absolute;
+    width: 200%; height: 200%;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 20%);
+    background-size: 80px 80px;
+    top: -50%; left: -50%;
+    animation: moveBg 30s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes moveBg {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#intro-screen h1 { 
+    color: #fff; font-size: 5rem; text-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    z-index: 10; margin-bottom: 10px;
+}
+
+#start-button {
+    padding: 15px 60px; font-size: 1.8rem; background: #ffce00; border: none;
+    border-radius: 50px; cursor: pointer; font-weight: bold; color: #333;
+    z-index: 10; transition: 0.3s;
+}
+
+.settings-intro-btn {
+    margin-top: 20px; background: rgba(255,255,255,0.2); border: 2px solid #fff;
+    color: white; padding: 10px 30px; border-radius: 20px; cursor: pointer; z-index: 10;
+}
+
+
+
+#shopBtn{
+position:fixed;
+top:20px;
+left:20px;
+width:70px;
+height:70px;
+font-size:30px;
+border:none;
+border-radius:50%;
+background:#ffce00;
+cursor:pointer;
+z-index:50;
+}
+
+#shop{
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#222;
+color:white;
+padding:25px;
+border-radius:15px;
+display:none;
+z-index:60;
+width:260px;
+}
+
+
+#shop {
+    width: 300px; /* تكبير العرض قليلاً */
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 4px solid #ffce00;
+}
+
+.shopItem button {
+    background: #ffce00;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    padding: 8px;
+}
+
+
+
+        body { margin: 0; overflow: hidden; font-family: 'Cairo', sans-serif; user-select: none; background: #000; }
+        
+
+       
+#controls {
+
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    display: grid;
+    grid-template-columns: repeat(3, 85px) 90px; /* 3 أزرار + زر القفز */
+    grid-template-rows: repeat(2, 85px);
+    gap: 10px;
+
+    z-index: 1000;
+    direction: ltr;
+}
+
+
+
+
+
+.btn {
+    width: 80px;
+    height: 80px;
+    font-size: 30px;
+    background: rgba(255, 255, 255, 0.2); /* خلفية شفافة عصرية */
+    backdrop-filter: blur(8px); /* تأثير زجاجي */
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    touch-action: none;
+    cursor: pointer;
+    transition: all 0.1s;
+}
+
+/* توزيع الأزرار على الشبكة */
+.up { grid-column: 2; grid-row: 1; }
+
+.left { grid-column: 1; grid-row: 2; }
+.down { grid-column: 2; grid-row: 2; }
+.right { grid-column: 3; grid-row: 2; }
+
+/* زر القفز */
+.jump {
+    grid-column: 4;
+    grid-row: 2;
+    margin-left: 10px;
+    background: rgba(255, 206, 0, 0.5) !important;
+}
+/* تأثير الضغط */
+.btn:active { 
+    background: #ffce00; 
+    color: #000; 
+    transform: scale(0.85); 
+    border-color: #fff;
+}
+
+
+#shopHeader{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:10px;
+font-size:22px;
+}
+
+
+#closeShop{
+background:red;
+border:none;
+color:white;
+font-size:20px;
+width:35px;
+height:35px;
+border-radius:50%;
+cursor:pointer;
+}
+
+#shopCategories{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+text-align:center;
+}
+
+#shopCategories button{
+font-size:22px;
+padding:15px;
+border-radius:12px;
+border:none;
+cursor:pointer;
+background:#444;
+color:white;
+}
+
+#shopItems{
+margin-top:10px;
+}
+
+.shopItem{
+background:#333;
+padding:10px;
+margin:8px 0;
+border-radius:10px;
+text-align:center;
+}
+
+.shopItem button{
+margin-top:5px;
+padding:5px 10px;
+
+}
+
+#controls .btn {
+    
+
+    pointer-events: auto;
+ 
+}
+
+
+
+ #controls, #shopBtn, #bagBtn, #settingsBtn, #moneyUI {
+    display: none; 
+    opacity: 0; 
+    pointer-events: none;
+    z-index: 2000;
+    transition: opacity 0.5s;
+}
+    
+
+    </style>
+</head>
+
+
+
+
+<body>
+
+
+
+    
+<div id="intro-screen">
+    <div class="overlay-graphics"></div>
+    <h1>BEAR WORLD</h1>
+    <p style="color: white; font-size: 1.2rem; margin-bottom: 30px; z-index:10;">مرحباً بك في عالم المغامرة</p>
+    <button id="start-button">▶️ ابدأ اللعب</button>
+
+
+<button class="settings-intro-btn" onclick="document.getElementById('settings').style.display='block'">⚙️ الإعدادات</button>
+
+</div> <!-- نهاية intro-screen -->
+
+
+
+
+<div id="controls">
+    <div class="btn up" id="btnUp">▲</div>
+    <div class="btn left" id="btnLeft">◀</div>
+    <div class="btn down" id="btnDown">▼</div>
+    <div class="btn right" id="btnRight">▶</div>
+    <div class="btn jump" id="btnJump">🚀</div>
+</div>
+
+
+
+
+
+<button id="shopBtn">🛒</button>
+
+<div id="shop">
+
+<div id="shopHeader">
+<span>المتجر</span>
+<button id="closeShop">❌</button>
+</div>
+
+<div id="shopCategories">
+<button onclick="openCategory('furniture')">🛋️<br>أثاث</button>
+<button onclick="openCategory('food')">🍎<br>أكل</button>
+<button onclick="openCategory('tools')">🧰<br>معدات</button>
+</div>
+
+<div id="shopItems"></div>
+
+</div>
+
+
+<button id="settingsBtn" onclick="document.getElementById('settings').style.display='block'" style="
+position:fixed;
+top:20px;
+right:20px;
+width:70px;
+height:70px;
+border-radius:50%;
+font-size:30px;
+background:#607d8b;
+border:none;
+z-index:50;
+">⚙️</button>
+
+
+<div id="settings" style="
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#222;
+color:white;
+padding:20px;
+display:none;
+z-index:100;
+width:250px;
+border-radius:10px;
+text-align:center;
+">
+
+<h3>⚙️ الإعدادات</h3>
+
+<button onclick="goHome()">🏠 </button>
+<br><br>
+
+<button onclick="toggleSound()">🔊 </button>
+<br><br>
+
+
+<button onclick="closeSettings()">❌ </button>
+
+</div>
+
+
+<button id="bagBtn" style="
+position:fixed;
+top:100px;
+left:20px;
+width:70px;
+height:70px;
+border-radius:50%;
+font-size:30px;
+background:#00c853;
+border:none;
+z-index:50;
+">🎒</button>
+
+
+
+
+<div id="bag" style="
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#222;
+color:white;
+padding:20px;
+display:none;
+z-index:100;
+width:250px;
+border-radius:10px;
+"></div>
+
+
+
+<button id="exitCarBtn" style="
+position:fixed;
+bottom:120px;
+right:20px;
+width:80px;
+height:80px;
+border-radius:50%;
+background:red;
+color:white;
+font-size:20px;
+border:none;
+z-index:1000;
+display:none;
+">🚪</button>
+   
+
+<script type="importmap">
+    { "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+
+
+</script>
+
+
+<script type="module">
+
+
+    import * as THREE from 'three';
+
+// 1. تعريف الأصوات والحالة 
+let stepSound = new Audio("https://www.soundjay.com/footsteps/footsteps-1.mp3");
+let birdSound = new Audio("https://www.orangefreesounds.com/wp-content/uploads/2021/04/Soft-bird-chirping-sound-effect.mp3");
+stepSound.loop = true;
+birdSound.loop = true;
+birdSound.volume = 0.2;
+let soundOn = true;
+
+// 2. برمجة زر البداية
+
+
+document.getElementById('start-button').onclick = () => {
+    document.getElementById('intro-screen').style.display = 'none';
+
+
+    const uiElements = ["controls", "shopBtn", "bagBtn", "settingsBtn", "moneyUI"];
+
+uiElements.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) {
+
+        if(id === "controls"){
+            el.style.display = "grid"; 
+        } else {
+            el.style.display = "block";
+        }
+
+        setTimeout(() => {
+            el.style.opacity = "1";
+            el.style.pointerEvents = "auto";
+        }, 10);
+    }
+});
+    if(soundOn) {
+        birdSound.play().catch(() => {});
+    }
+};
+
+
+
+
+
+ const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xa2d2ff);
+    scene.fog = new THREE.Fog(0xa2d2ff, 30, 160);
+
+//الكاميرا
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+    document.body.appendChild(renderer.domElement);
+
+    const sun = new THREE.DirectionalLight(0xffffff, 1.5);
+    sun.position.set(20, 50, 20);
+    sun.castShadow = true;
+    scene.add(sun, new THREE.AmbientLight(0xffffff, 0.6));
+
+    const ground = new THREE.Mesh(
+        new THREE.PlaneGeometry(2000, 2000),
+        new THREE.MeshStandardMaterial({ color: 0x7fb069 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // بناء الدب
+    const bear = new THREE.Group();
+    const whiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.7 });
+    const blackMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.9 });
+    const pinkMat = new THREE.MeshStandardMaterial({ color: 0xffb6c1 });
+
+    const body = new THREE.Mesh(new THREE.SphereGeometry(1.2, 32, 32), whiteMat);
+    body.position.y = 1.2; body.castShadow = true; body.receiveShadow = true;
+    bear.add(body);
+
+    const headGroup = new THREE.Group();
+    const face = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), whiteMat);
+    face.castShadow = true;
+    headGroup.add(face);
+    headGroup.position.y = 2.6; 
+    bear.add(headGroup);
+
+    const eyeGeo = new THREE.SphereGeometry(0.1, 16, 16);
+    const eyeL = new THREE.Mesh(eyeGeo, blackMat);
+    eyeL.position.set(0.3, 0.2, 0.65); headGroup.add(eyeL);
+    const eyeR = eyeL.clone(); eyeR.position.x = -0.3; headGroup.add(eyeR);
+
+    const nose = new THREE.Mesh(new THREE.SphereGeometry(0.15, 16, 16), blackMat);
+    nose.position.set(0, 0, 0.8); 
+    nose.scale.set(1, 0.8, 1);
+    headGroup.add(nose);
+
+    const mouthGeo = new THREE.TorusGeometry(0.2, 0.03, 8, 16, Math.PI); 
+    const mouth = new THREE.Mesh(mouthGeo, blackMat);
+    mouth.position.set(0, -0.25, 0.75);
+    mouth.rotation.set(Math.PI / 2, 0, Math.PI); 
+    headGroup.add(mouth);
+
+    const earGeo = new THREE.SphereGeometry(0.25, 16, 16);
+    const earInnerGeo = new THREE.SphereGeometry(0.15, 16, 16);
+    const earL = new THREE.Mesh(earGeo, whiteMat);
+    earL.position.set(0.6, 0.6, 0); headGroup.add(earL);
+    const earLInner = new THREE.Mesh(earInnerGeo, pinkMat);
+    earLInner.position.set(0, 0, 0.1); earL.add(earLInner);
+    const earR = earL.clone(); earR.position.x = -0.6; headGroup.add(earR);
+
+ 
+
+
+
+  
+    
+    // في قسم بناء الدب
+
+let armL, armR;
+let legL, legR;
+
+    const armGeo = new THREE.CapsuleGeometry(0.25, 0.8, 8, 16);
+
+
+armL = new THREE.Mesh(armGeo, whiteMat);
+armL.position.set(1.2, 1.5, 0);
+bear.add(armL);
+
+armR = armL.clone();
+armR.position.x = -1.2;
+bear.add(armR);
+
+
+
+
+const legGeo = new THREE.CapsuleGeometry(0.25, 0.5, 8, 16);
+
+legL = new THREE.Mesh(legGeo, whiteMat);
+legL.position.set(0.5, 0.3, 0);
+bear.add(legL);
+
+legR = legL.clone();
+legR.position.x = -0.5;
+bear.add(legR);
+
+scene.add(bear);
+
+
+
+
+const savedPos = localStorage.getItem("bearPos");
+
+if(savedPos){
+    const pos = JSON.parse(savedPos);
+    bear.position.set(pos.x, pos.y, pos.z);
+}
+
+
+
+
+
+let placedItems = [];
+
+let placedItemsData = localStorage.getItem("placedItems")
+    ? JSON.parse(localStorage.getItem("placedItems"))
+    : [];
+
+// 🔄 تحميل الأغراض
+placedItemsData.forEach(data => {
+    let item;
+
+    if(data.type === "tv"){
+        item = new THREE.Mesh(
+            new THREE.BoxGeometry(1.5,1,0.3),
+            new THREE.MeshStandardMaterial({color:0x222222})
+        );
+    }
+
+    if(data.type === "sofa"){
+        item = new THREE.Mesh(
+            new THREE.BoxGeometry(2,1,1),
+            new THREE.MeshStandardMaterial({color:0x884422})
+        );
+    }
+
+    if(data.type === "lamp"){
+        item = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.1,0.1,2),
+            new THREE.MeshStandardMaterial({color:0xffffaa})
+        );
+    }
+
+    if(data.type === "bed"){
+        item = new THREE.Mesh(
+            new THREE.BoxGeometry(2,0.3,2),
+            new THREE.MeshStandardMaterial({color:0x8d6e63})
+        );
+    }
+
+    if(data.type === "food"){
+        item = new THREE.Mesh(
+            new THREE.BoxGeometry(1,0.2,1),
+            new THREE.MeshStandardMaterial({color:0x4caf50})
+        );
+    }
+
+    if(data.type === "farm"){
+        item = new THREE.Mesh(
+            new THREE.BoxGeometry(2,0.1,2),
+            new THREE.MeshStandardMaterial({color:0x6d4c41})
+        );
+    }
+
+    if(item){
+        item.position.set(data.x, data.y, data.z);
+        scene.add(item);
+        placedItems.push(item);
+    }
+});
+
+
+
+
+const obstacles = [];
+
+const automaticDoors = [];
+
+
+
+// جزء إنشاء الدببة الإضافية (NPC) وتلوينها بألوان عشوائية
+
+const npcBears = [];
+
+const bearColors = [0xffffff, 0xffcccc, 0xd2b48c, 0x63472b, 0x222222, 0xffce00]; 
+
+for(let i = 0; i < 15; i++) { 
+
+    const npc = bear.clone(true);
+
+
+
+    // اختيار لون عشوائي وتطبيقه
+    const randomColor = bearColors[Math.floor(Math.random() * bearColors.length)];
+    
+    npc.traverse((child) => {
+        if (child.isMesh && child.material.color.getHex() === 0xffffff) { 
+            child.material = child.material.clone(); 
+            child.material.color.setHex(randomColor);
+        }
+    });
+
+    npc.position.set(
+        Math.random() * 200 - 100,
+        0,
+        Math.random() * 200 - 100
+    );
+
+    scene.add(npc);
+    npcBears.push({ mesh: npc, direction: Math.random() * Math.PI * 2 });
+    obstacles.push(npc); // منع اختراق الدببة لبعضها
+}
+
+
+
+const pigs = [];
+
+for(let i = 0; i < 5; i++){
+
+    const pig = new THREE.Group();
+
+    const body = new THREE.Mesh(
+        new THREE.SphereGeometry(0.9, 32, 32),
+        new THREE.MeshStandardMaterial({color:0xff9aa2})
+    );
+    body.position.y = 0.9;
+
+    const head = new THREE.Mesh(
+        new THREE.SphereGeometry(0.6, 32, 32),
+        new THREE.MeshStandardMaterial({color:0xff9aa2})
+    );
+    head.position.set(0,1.2,0.9);
+
+    pig.add(body, head);
+
+    pig.position.set(
+        Math.random()*200-100,
+        0,
+        Math.random()*200-100
+    );
+
+
+
+    
+
+
+    scene.add(pig);
+    pigs.push({ mesh: pig, direction: Math.random() * Math.PI * 2 });
+    obstacles.push(pig);
+}
+   
+
+
+const ducks = [];
+
+for(let i = 0; i < 5; i++){
+
+    const duck = new THREE.Group();
+
+    const yellow = new THREE.MeshStandardMaterial({color:0xffe066});
+    const orange = new THREE.MeshStandardMaterial({color:0xff8c00});
+    const black = new THREE.MeshStandardMaterial({color:0x000000});
+
+ 
+    const body = new THREE.Mesh(
+        new THREE.SphereGeometry(0.8, 32, 32),
+        yellow
+    );
+    body.position.y = 0.8;
+    duck.add(body);
+
+
+    const head = new THREE.Mesh(
+        new THREE.SphereGeometry(0.5, 32, 32),
+        yellow
+    );
+    head.position.set(0,1.4,0.6);
+    duck.add(head);
+
+  
+    const beak = new THREE.Mesh(
+        new THREE.BoxGeometry(0.3,0.2,0.4),
+        orange
+    );
+    beak.position.set(0,1.3,1);
+    duck.add(beak);
+
+
+    const eye = new THREE.Mesh(
+        new THREE.SphereGeometry(0.08,16,16),
+        black
+    );
+    eye.position.set(0.2,1.5,0.9);
+    duck.add(eye);
+
+    const eye2 = eye.clone();
+    eye2.position.x = -0.2;
+    duck.add(eye2);
+
+    duck.position.set(
+        Math.random()*200-100,
+        0,
+        Math.random()*200-100
+    );
+
+    
+    scene.add(duck);
+    ducks.push({ mesh: duck, direction: Math.random() * Math.PI * 2 });
+    obstacles.push(duck);
+}
+    
+        
+
+
+for (let i = 0; i < 100; i++) {
+        const tree = new THREE.Group();
+        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.5, 3), new THREE.MeshStandardMaterial({color: 0x582f0e}));
+        const top = new THREE.Mesh(new THREE.ConeGeometry(2, 6, 8), new THREE.MeshStandardMaterial({color: 0x386641}));
+        top.position.y = 4; trunk.position.y = 1.5;
+        tree.add(trunk, top);
+        tree.position.set(Math.random()*300-150, 0, Math.random()*300-150);
+
+        
+if(tree.position.length() > 25){
+scene.add(tree);
+obstacles.push(tree);
+
+}
+
+}
+
+
+
+for (let i = 0; i < 20; i++) {
+    const house = new THREE.Group();
+
+    const base = new THREE.Mesh(
+        new THREE.BoxGeometry(4,3,4),
+        new THREE.MeshStandardMaterial({color: 0xffd6a5})
+    );
+
+    const roof = new THREE.Mesh(
+        new THREE.ConeGeometry(3.5,2,4),
+        new THREE.MeshStandardMaterial({color: 0x8b0000})
+    );
+
+    roof.position.y = 2.5;
+    roof.rotation.y = Math.PI/4;
+
+    house.add(base,roof);
+
+    house.position.set(Math.random()*300-150,1.5,Math.random()*300-150);
+
+    scene.add(house);
+obstacles.push(house);
+}
+
+
+
+for (let i = 0; i < 10; i++) {
+
+    const building = new THREE.Mesh(
+        new THREE.BoxGeometry(8,20,8),
+        new THREE.MeshStandardMaterial({color: 0xb0bec5})
+    );
+
+    building.position.set(
+        Math.random()*300-150,
+        10,
+        Math.random()*300-150
+    );
+
+    scene.add(building);
+    obstacles.push(building);
+
+   
+    const door = new THREE.Mesh(
+        new THREE.BoxGeometry(2,3,0.3),
+        new THREE.MeshStandardMaterial({color:0x5d4037})
+    );
+
+automaticDoors.push(door);
+    door.position.set(
+        building.position.x,
+        1.5,
+        building.position.z + 4.15
+    );
+
+    scene.add(door);
+
+   
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 128;
+
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "white";
+    ctx.fillRect(0,0,256,128);
+
+    ctx.fillStyle = "black";
+    ctx.font = "bold 80px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(i+1,128,64);
+
+    const texture = new THREE.CanvasTexture(canvas);
+
+    const numberSign = new THREE.Mesh(
+        new THREE.PlaneGeometry(2,1),
+        new THREE.MeshBasicMaterial({map:texture})
+    );
+
+    numberSign.position.set(
+        building.position.x,
+        4,
+        building.position.z + 4.2
+    );
+
+    scene.add(numberSign);
+}
+
+
+const cars = [];
+
+for (let i = 0; i < 8; i++) {
+
+
+    const car = new THREE.Mesh(
+        new THREE.BoxGeometry(2,1,4),
+        new THREE.MeshStandardMaterial({color: 0xff0000})
+    );
+
+    car.position.set(
+        Math.random()*200-100,
+        0.5,
+        Math.random()*200-100
+    );
+
+    scene.add(car);
+
+    cars.push(car);
+}
+
+
+
+    const keys = { fwd: false, bwd: false, lft: false, rgt: false };
+
+const setupInput = (id, key) => {
+    const el = document.getElementById(id);
+    if(el) {
+        el.onpointerdown = () => keys[key] = true;
+        el.onpointerup = () => keys[key] = false;
+    }
+};
+
+
+window.addEventListener("pointerup", () => {
+    keys.fwd = false;
+    keys.bwd = false;
+    keys.lft = false;
+    keys.rgt = false;
+});
+
+    setupInput('btnUp', 'fwd'); setupInput('btnDown', 'bwd');
+    setupInput('btnLeft', 'lft'); setupInput('btnRight', 'rgt');
+
+    window.onkeydown = (e) => {
+        if(e.code === 'KeyW' || e.code === 'ArrowUp') keys.fwd = true;
+        if(e.code === 'KeyS' || e.code === 'ArrowDown') keys.bwd = true;
+        if(e.code === 'KeyA' || e.code === 'ArrowLeft') keys.lft = true;
+        if(e.code === 'KeyD' || e.code === 'ArrowRight') keys.rgt = true;
+    };
+    window.onkeyup = (e) => {
+        if(e.code === 'KeyW' || e.code === 'ArrowUp') keys.fwd = false;
+        if(e.code === 'KeyS' || e.code === 'ArrowDown') keys.bwd = false;
+        if(e.code === 'KeyA' || e.code === 'ArrowLeft') keys.lft = false;
+        if(e.code === 'KeyD' || e.code === 'ArrowRight') keys.rgt = false;
+    };
+
+
+    const speed = 0.2;
+    const turn = 0.04;
+    let cameraPos = new THREE.Vector3();
+
+
+let cameraYaw = 0;
+let cameraPitch = 0;
+
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+
+
+let inventory = localStorage.getItem("inventory")
+    ? JSON.parse(localStorage.getItem("inventory"))
+    : [];
+
+
+
+window.addEventListener("touchstart", e=>{
+
+    touchStartX =
+ e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+});
+
+
+
+window.addEventListener("touchmove", e => {
+    if (e.target.classList.contains('btn')) return; 
+
+    const dx = e.touches[0].clientX - touchStartX;
+    const dy = e.touches[0].clientY - touchStartY;
+
+    
+    cameraYaw -= dx * 0.008;
+    cameraPitch += dy * 0.008; 
+
+
+    cameraPitch = Math.max(0.1, Math.min(1.5, cameraPitch));
+
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+}, { passive: false });
+
+
+document.getElementById("bagBtn").onclick = () => {
+
+    const bag = document.getElementById("bag");
+
+
+    let html = `
+    <h3>🎒 السلة</h3>
+    <button onclick="closeBag()">❌ إغلاق</button>
+    `;
+
+
+    inventory.forEach((item, i) => {
+        html += `<div style="margin:5px;">
+        ${item}
+        <button onclick="useItem(${i})">استعمال</button>
+        </div>`;
+    });
+
+    bag.innerHTML = html;
+    bag.style.display = "block";
+};
+
+
+
+window.useItem = function(index){
+    const item = inventory[index];
+
+    placeItem(item);
+
+
+
+    inventory.splice(index,1);
+saveGame();
+
+
+localStorage.setItem("inventory", JSON.stringify(inventory));
+
+    document.getElementById("bag").style.display = "none";
+}
+
+
+
+// 1. البيانات الأساسية (تأكدي أنها موجودة)
+const shopData = {
+    furniture: [
+        {icon: "📺", name: "تلفاز", price: 200, type: "tv"},
+        {icon: "🛏️", name: "سرير", price: 300, type: "bed"},
+
+    {icon: "🛋️", name: "كنبة", price: 250, type: "sofa"},
+        {icon: "💡", name: "مصباح", price: 100, type: "lamp"}
+    ],
+    food: [
+        {icon: "🍎", name: "تفاحة", price: 20, type: "food"},
+        {icon: "🍖", name: "لحم", price: 40, type: "food"}
+    ],
+
+    
+tools: [
+    {icon: "🪓", name: "فأس", price: 120, type: "tool"},
+    {icon: "🌱", name: "أرضية", price: 5, type: "farm"}
+]
+};
+
+
+
+let money = parseInt(localStorage.getItem("money")) || 1000;
+
+function saveGame(){
+    localStorage.setItem("money", money);
+}
+    
+let lastClickTime = 0;
+let selectedItem = null;
+
+ 
+const moneyDiv = document.createElement("div");
+moneyDiv.id = "moneyUI";
+moneyDiv.innerText = money + " دج";
+moneyDiv.style.display = "none"; // أضف هذا السطر
+moneyDiv.style.opacity = "0"; 
+document.body.appendChild(moneyDiv);
+
+
+
+
+const style = document.createElement("style");
+style.innerHTML = `
+#moneyUI{
+    position: fixed;
+    top: 20px;
+    right: 120px;
+    background: black;
+    color: #ffce00;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 20px;
+    z-index: 999;
+}
+`;
+document.head.appendChild(style);
+
+
+
+function updateMoneyUI(){
+    document.getElementById("moneyUI").innerText = money + " دج";
+}
+
+ 
+
+window.addEventListener("click", (event)=>{
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+
+    const intersects = raycaster.intersectObjects(placedItems, true);
+
+
+    if(intersects.length > 0){
+        const clickedItem = intersects[0].object;
+
+
+        let now = Date.now();
+
+        
+        if(now - lastClickTime < 300){
+            selectedItem = clickedItem;
+            showDeleteButton();
+        }
+
+        lastClickTime = now;
+    }
+});
+
+window.closeBag = function(){
+    document.getElementById("bag").style.display = "none";
+}
+
+window.openCategory = function(cat) {
+    const items = shopData[cat];
+    let html = `<button onclick="backToCategories()" style="background:#555; color:white; width:100%; padding:10px; border:none; border-radius:5px; margin-bottom:10px; cursor:pointer;">⬅ رجوع للمجموعات</button>`;
+
+    items.forEach(item => {
+        html += `
+        <div class="shopItem" style="background:#333; border:1px solid #ffce00; margin:10px 0; padding:15px; border-radius:10px; text-align:center;">
+            <div style="font-size:40px; margin-bottom:5px;">${item.icon}</div>
+            <div style="font-weight:bold; color:white;">${item.name}</div>
+            <div style="color:#ffce00; margin:5px 0;">${item.price} دج</div>
+            <button onclick="buyProduct('${item.type}', ${item.price})" style="background:#ffce00; border:none; padding:8px 20px; border-radius:5px; font-weight:bold; cursor:pointer; width:100%;">شراء الآن</button>
+        </div>`;
+    });
+
+    document.getElementById("shopItems").innerHTML = html;
+    document.getElementById("shopCategories").style.display = "none";
+}
+
+
+
+window.backToCategories = function() {
+    document.getElementById("shopCategories").style.display = "grid";
+    document.getElementById("shopItems").innerHTML = "";
+}
+
+
+
+
+
+window.buyProduct = function(type, price) {
+    if (money < price) {
+        alert("⚠️ عذراً! ليس لديك مال كافي.");
+        return;
+    }
+
+    money -= price;
+
+updateMoneyUI();
+
+localStorage.setItem("money", money); 
+
+inventory.push(type);
+
+   
+    localStorage.setItem("inventory", JSON.stringify(inventory));
+
+    alert("🛒 تم الشراء! الرصيد المتبقي: " + money + " دج");
+};
+
+
+document.getElementById("shopBtn").onclick = () => {
+    document.getElementById("shop").style.display = "block";
+};
+
+document.getElementById("closeShop").onclick = () => {
+    document.getElementById("shop").style.display = "none";
+};
+
+
+
+
+
+
+function showDeleteButton(){
+
+    let btn = document.getElementById("deleteBtn");
+
+    if(!btn){
+        btn = document.createElement("button");
+        btn.id = "deleteBtn";
+        btn.innerText = "🗑️ ";
+
+        btn.style.position = "fixed";
+        btn.style.bottom = "100px";
+        btn.style.left = "50%";
+        btn.style.transform = "translateX(-50%)";
+        btn.style.padding = "10px";
+        btn.style.background = "red";
+        btn.style.color = "white";
+        btn.style.border = "none";
+        btn.style.zIndex = "200";
+
+        document.body.appendChild(btn);
+
+        btn.onclick = () => {
+            if(selectedItem){
+                scene.remove(selectedItem);
+
+                // نحذفه من القائمة
+                placedItems = placedItems.filter(i => i !== selectedItem);
+
+                selectedItem = null;
+                btn.style.display = "none";
+            }
+        };
+    }
+
+    btn.style.display = "block";
+}
+
+
+
+
+
+function checkCollision(obj) {
+    const box1 = new THREE.Box3().setFromObject(obj);
+
+    for (let o of obstacles) {
+        const box2 = new THREE.Box3().setFromObject(o);
+
+        if (box1.intersectsBox(box2)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+
+function placeItem(type){
+
+let item;
+
+if(type === "tv"){
+    item = new THREE.Mesh(
+        new THREE.BoxGeometry(1.5,1,0.3),
+        new THREE.MeshStandardMaterial({color:0x222222})
+    );
+}
+
+if(type === "sofa"){
+    item = new THREE.Mesh(
+        new THREE.BoxGeometry(2,1,1),
+        new THREE.MeshStandardMaterial({color:0x884422})
+    );
+}
+
+if(type === "lamp"){
+    item = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.1,0.1,2),
+        new THREE.MeshStandardMaterial({color:0xffffaa})
+    );
+}
+
+if(type === "bed"){
+    item = new THREE.Mesh(
+        new THREE.BoxGeometry(2,0.3,2),
+        new THREE.MeshStandardMaterial({color:0x8d6e63})
+    );
+}
+
+if(type === "food"){
+    item = new THREE.Mesh(
+        new THREE.BoxGeometry(1,0.2,1),
+        new THREE.MeshStandardMaterial({color:0x4caf50})
+    );
+}
+
+
+if(type === "farm"){
+    item = new THREE.Mesh(
+        new THREE.BoxGeometry(2,0.1,2),
+        new THREE.MeshStandardMaterial({color:0x6d4c41})
+    );
+}
+
+
+if(!item) return;
+
+item.position.copy(bear.position);
+item.position.y = 0;
+
+scene.add(item);
+
+placedItems.push(item);
+
+
+placedItemsData.push({
+    type: type,
+    x: item.position.x,
+    y: item.position.y,
+    z: item.position.z
+});
+
+localStorage.setItem("placedItems", JSON.stringify(placedItemsData));
+}
+
+
+
+window.openSettings = function() {
+    document.getElementById("settings").style.display = "block";
+};
+
+
+
+function createHuman(){
+    const human = new THREE.Mesh(
+        new THREE.CapsuleGeometry(0.5,1.5,8,16),
+        new THREE.MeshStandardMaterial({color:0x00aaff})
+    );
+    human.position.set(Math.random()*200-100, 1, Math.random()*200-100);
+    scene.add(human);
+    
+    obstacles.push(human); 
+}
+
+
+
+
+for(let i=0;i<10;i++){
+createHuman();
+}
+
+
+let verticalVelocity = 0;
+let isGrounded = true;
+const gravity = -0.015;
+const jumpForce = 0.35;
+
+
+keys.jump = false;
+
+const btnJump = document.getElementById('btnJump');
+btnJump.onpointerdown = () => { if(isGrounded) keys.jump = true; };
+btnJump.onpointerup = () => keys.jump = false;
+
+
+window.addEventListener('keydown', (e) => {
+    if(e.code === 'Space' && isGrounded) verticalVelocity = jumpForce;
+});
+
+const exitBtn = document.getElementById('exitCarBtn');
+
+exitBtn.onclick = () => {
+    if(currentCar){
+        bear.position.set(
+            currentCar.position.x + 3,
+            0,
+            currentCar.position.z
+        );
+        currentCar = null;
+        bear.visible = true;
+    }
+};
+
+
+window.addEventListener('keydown', (e) => {
+    if(e.code === 'KeyE' && currentCar){
+        bear.position.set(
+            currentCar.position.x + 3,
+            0,
+            currentCar.position.z
+        );
+        currentCar = null;
+        bear.visible = true;
+    }
+});
+
+
+function checkCarEntry() {
+    if(currentCar) return; 
+
+    cars.forEach(car => {
+        if (bear.position.distanceTo(car.position) < 3) {
+            currentCar = car;
+        }
+    });
+}
+
+let moveSpeed = 0.2; 
+
+let currentCar = null;
+  
+let gameLoaded = false;
+
+gameLoaded = true;
+
+function animate() {
+    requestAnimationFrame(animate);
+    
+    let time = performance.now() * 0.01;
+
+    if (soundOn && isGrounded && (keys.fwd || keys.bwd || keys.lft || keys.rgt) && !currentCar) {
+     
+   if (stepSound.paused) stepSound.play();
+    } else {
+        stepSound.pause();
+    }
+
+    
+    if (!currentCar) {
+
+if (keys.jump && isGrounded) {
+    verticalVelocity = jumpForce;
+    isGrounded = false;
+    keys.jump = false; 
+}
+
+        verticalVelocity += gravity;
+        bear.position.y += verticalVelocity;
+
+        if (bear.position.y <= 0) {
+            bear.position.y = 0;
+            verticalVelocity = 0;
+            isGrounded = true;
+        }
+    }
+
+if (currentCar) {
+   
+    exitBtn.style.display = "block";
+    bear.visible = false;
+    
+    if (keys.fwd) currentCar.translateZ(0.5);
+    if (keys.bwd) currentCar.translateZ(-0.3);
+    if (keys.lft) currentCar.rotation.y += 0.04;
+    if (keys.rgt) currentCar.rotation.y -= 0.04;
+
+    bear.position.copy(currentCar.position);
+
+} else {
+  
+    exitBtn.style.display = "none";
+    bear.visible = true;
+    checkCarEntry();
+
+    if (gameLoaded && (keys.fwd || keys.bwd || keys.lft || keys.rgt)) {
+
+   
+        legL.rotation.x = Math.sin(time * 12) * 0.6;
+        legR.rotation.x = Math.sin(time * 12 + Math.PI) * 0.6;
+
+   
+        armL.rotation.x = Math.sin(time * 12 + Math.PI) * 0.4;
+        armR.rotation.x = Math.sin(time * 12) * 0.4;
+
+      
+        let targetRotation = cameraYaw + Math.PI;
+        if (keys.bwd) targetRotation += Math.PI;
+        if (keys.lft) targetRotation += Math.PI / 4;
+        if (keys.rgt) targetRotation -= Math.PI / 4;
+
+        bear.rotation.y = THREE.MathUtils.lerp(
+            bear.rotation.y,
+            targetRotation,
+            0.1
+        );
+
+ 
+        bear.translateZ(moveSpeed);
+
+        if (checkCollision(bear)) {
+            bear.translateZ(-moveSpeed);
+        }
+
+    } else {
+      
+        legL.rotation.x = THREE.MathUtils.lerp(legL.rotation.x, 0, 0.1);
+        legR.rotation.x = THREE.MathUtils.lerp(legR.rotation.x, 0, 0.1);
+
+        armL.rotation.x = THREE.MathUtils.lerp(armL.rotation.x, 0, 0.1);
+        armR.rotation.x = THREE.MathUtils.lerp(armR.rotation.x, 0, 0.1);
+    }
+}
+
+
+            
+  
+
+    [...npcBears, ...pigs, ...ducks].forEach(npc => {
+        let obj = npc.mesh || npc;
+        let dist = obj.position.distanceTo(bear.position);
+        if(dist < 5) {
+            npc.direction = Math.atan2(obj.position.x - bear.position.x, obj.position.z - bear.position.z);
+
+            obj.rotation.y = npc.direction;
+obj.translateZ(0.12);
+
+        } else {
+            obj.translateZ(0.04);
+            if(Math.random() < 0.01) npc.direction += (Math.random() - 0.5);
+
+        }
+        obj.rotation.y = npc.direction;
+    });
+
+
+    
+
+    const cameraHeight = 5 + (cameraPitch * 5); 
+    const dist = 12;
+    const offset = new THREE.Vector3(Math.sin(cameraYaw)*dist, cameraHeight, Math.cos(cameraYaw)*dist);
+    
+    cameraPos.lerp(bear.position.clone().add(offset), 0.1);
+    camera.position.copy(cameraPos);
+    camera.lookAt(bear.position.x, bear.position.y + 2, bear.position.z);
+
+ 
+    automaticDoors.forEach(door => {
+        const distance = bear.position.distanceTo(door.position);
+        door.rotation.y = (distance < 4) ? -Math.PI/2 : 0;
+    });
+
+localStorage.setItem("bearPos", JSON.stringify({
+    x: bear.position.x,
+    y: bear.position.y,
+    z: bear.position.z
+}));
+
+    renderer.render(scene, camera);
+}
+
+
+
+
+   animate();
+
+
+window.onresize = () => {
+    
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+window.closeSettings = function() {
+    document.getElementById('settings').style.display = 'none';
+}
+
+
+window.goHome = function() {
+    location.reload();
+}
+
+
+window.toggleSound = function() {
+    soundOn = !soundOn;
+    alert(soundOn ? "🔊 الصوت اشتغل" : "🔇 تم كتم الصوت");
+}
+
+
+</script>
+</body>
+</html>
